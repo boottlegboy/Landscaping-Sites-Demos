@@ -7,30 +7,17 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 
 const projects = [
-  {
-    image:
-      "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&w=1200&q=80",
-    title: "Outdoor Renovation",
-    label: "Project 01",
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1598902108854-10e335adac99?auto=format&fit=crop&w=1200&q=80",
-    title: "Garden Refresh",
-    label: "Project 02",
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80",
-    title: "Backyard Upgrade",
-    label: "Project 03",
-  },
-  {
-    image:
-      "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=80",
-    title: "Landscape Design",
-    label: "Project 04",
-  },
+  { image: "/projects/IMG_0233.jpeg", title: "Outdoor Renovation", label: "Project 01" },
+  { image: "/projects/IMG_0239.jpeg", title: "Garden Refresh", label: "Project 02" },
+  { image: "/projects/IMG_0323.jpeg", title: "Backyard Upgrade", label: "Project 03" },
+  { image: "/projects/IMG_1837.jpeg", title: "Landscape Design", label: "Project 04" },
+  { image: "/projects/IMG_1942.jpeg", title: "Modern Courtyard", label: "Project 05" },
+  { image: "/projects/IMG_2520.jpeg", title: "Patio Makeover", label: "Project 06" },
+  { image: "/projects/IMG_2521.jpeg", title: "Poolside Retreat", label: "Project 07" },
+  { image: "/projects/IMG_3037.jpeg", title: "Lawn Revival", label: "Project 08" },
+  { image: "/projects/IMG_3864.jpeg", title: "Garden Pathway", label: "Project 09" },
+  { image: "/projects/IMG_3865.jpeg", title: "Tree Line Upgrade", label: "Project 10" },
+  { image: "/projects/IMG_5833.jpeg", title: "Full Landscape Redesign", label: "Project 11" },
 ];
 
 export default function ProjectGallerySlider() {

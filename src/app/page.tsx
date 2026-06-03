@@ -12,6 +12,8 @@ const baskervville = Baskervville({ subsets: ["latin"], weight: ["400"] });
 export default function LandscapeDemoHomepage() {
   const [estimateOpen, setEstimateOpen] = useState(false);
   const [selectedService, setSelectedService] = useState("");
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const [reviewRating, setReviewRating] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -74,10 +76,31 @@ export default function LandscapeDemoHomepage() {
   const aboutRevealOpacity = useTransform(scrollYProgress, [0.1, 0.35], [0, 1]);
   const portfolioY = useTransform(scrollYProgress, [0.45, 0.85], [90, -40]);
   const services = [
-    "Landscape Design",
-    "Lawn Maintenance",
-    "Tree & Shrub Care",
-    "Hardscape Installation",
+    {
+      title: "Landscape Design",
+      description:
+        "Transform your outdoor space with custom landscape designs tailored to your style and property. We create beautiful, functional landscapes that enhance curb appeal and bring your vision to life.",
+    },
+    {
+      title: "Lawn Maintenance",
+      description:
+        "Keep your lawn healthy, clean, and beautiful year-round with our professional lawn maintenance services. We provide mowing, edging, trimming, and routine upkeep to ensure your property always looks its best.",
+    },
+    {
+      title: "New Irrigation Installation",
+      description:
+        "Keep your landscape healthy and thriving with a professionally installed irrigation system. We design and install efficient watering solutions that provide proper coverage while helping conserve water and reduce maintenance.",
+    },
+    {
+      title: "Hardscape Installation",
+      description:
+        "Enhance your outdoor living space with custom hardscape features, including patios, natural walkways, pavers, and more. We create durable, attractive solutions that add beauty, functionality, and value to your property.",
+    },
+    {
+      title: "Landscape Lighting",
+      description:
+        "Highlight the beauty of your property with custom landscape lighting. We install elegant, energy-efficient lighting solutions that enhance curb appeal, improve safety, and create a welcoming outdoor atmosphere after dark.",
+    },
   ];
 
   return (
@@ -94,9 +117,15 @@ export default function LandscapeDemoHomepage() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/55 to-black/85" />
       </motion.div>
-      <header className="absolute left-0 top-0 z-30 w-full px-10 py-6 text-white">
+      <header className="absolute left-0 top-0 z-30 w-full px-10 py-8 text-white">
         <nav className="mx-auto flex max-w-7xl items-center justify-between">
-          <div style={{ fontFamily: nobile.style.fontFamily }} className="text-2xl font-bold tracking-wide">Evergreen Demo</div>
+          <a href="#home" className="flex items-center">
+          <img
+            src="/images/ProView Logo4.png"
+            alt="ProView Landscaping Logo"
+            className="h-24 w-auto object-contain drop-shadow-[0_0_18px_rgba(134,239,172,0.25)]"
+            />
+          </a>
           <div className="hidden items-center gap-8 text-sm font-medium uppercase tracking-wide md:flex">
             <a href="#home">Home</a>
             <a href="#about">About</a>
@@ -165,21 +194,21 @@ export default function LandscapeDemoHomepage() {
         <div className="rounded-2xl border border-white/10 bg-white/10 p-5">
           <p className="mb-2 font-bold text-green-300">Softscaping</p>
           <p>
-            Grass, sod, turf, mulch, plants, flower beds, sprinklers, and lighting.
+            Grass, Sod, Turf, Mulch, Plants, Flower Beds, Sprinklers, and Lighting.
           </p>
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/10 p-5">
           <p className="mb-2 font-bold text-green-300">Hardscaping</p>
           <p>
-            Retaining walls, pavers, stones, boulders, and outdoor structure details.
+            Natural Walkways, Pavers, and Outdoor Structure Details.
           </p>
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/10 p-5">
           <p className="mb-2 font-bold text-green-300">Work Area</p>
           <p>
-            Serving local residential, commercial, and multi-unit properties.
+            Serving Local Residential, Commercial, and Multi-Unit Properties.
           </p>
         </div>
       </div>
@@ -203,19 +232,18 @@ export default function LandscapeDemoHomepage() {
       style={{ fontFamily: baskervville.style.fontFamily }}
       className="mb-8 max-w-2xl text-5xl font-normal leading-tight text-white"
     >
-      A clean, reliable team for modern landscape projects.
+      Professional landscaping and maintenance for every property.
     </h2>
 
     <p className="mb-6 max-w-2xl text-lg leading-8 text-neutral-200">
-      This demo section uses placeholder copy to represent the company’s story,
-      mission, and approach to landscaping. The layout focuses on trust,
-      professionalism, and a premium service feel.
+      With years of experience, we provide professional landscaping and
+      maintenance services for both residential and commercial properties. Our
+      team is dedicated to delivering quality workmanship, reliable service, and
+      beautiful results that keep your property looking its best year-round.
     </p>
 
     <p className="max-w-2xl text-lg leading-8 text-neutral-300">
-      Future customers can quickly understand who the company is, what kind of
-      work they specialize in, and why they should feel confident requesting an
-      estimate.
+      No job is too big or too small—we take pride in every project we complete.
     </p>
   </div>
 
@@ -252,13 +280,13 @@ export default function LandscapeDemoHomepage() {
             <p className="mb-3 text-sm font-bold uppercase tracking-[0.3em] text-green-400">Services</p>
             <h2 style={{ fontFamily: baskervville.style.fontFamily }} className="text-5xl font-normal leading-tight text-white">Complete outdoor solutions for homes and businesses.</h2>
           </div>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-4">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
             {services.map((service, index) => (
-              <div key={service} className="rounded-2xl border border-white/10 bg-white/10 p-8 shadow-xl backdrop-blur-md transition hover:-translate-y-1 hover:bg-white/15 hover:shadow-2xl">
+              <div key={service.title} className="rounded-2xl border border-white/10 bg-white/10 p-8 shadow-xl backdrop-blur-md transition hover:-translate-y-1 hover:bg-white/15 hover:shadow-2xl">
                 <div className="mb-8 text-5xl font-bold text-green-300/35">0{index + 1}</div>
-                <h3 className="mb-4 text-xl font-bold text-white">{service}</h3>
+                <h3 className="mb-4 text-xl font-bold text-white">{service.title}</h3>
                 <p className="leading-7 text-neutral-300">
-                  Placeholder description for this service area. Short, clean, and focused on the value delivered to the customer.
+                  {service.description}
                 </p>
               </div>
             ))}
@@ -329,6 +357,142 @@ export default function LandscapeDemoHomepage() {
 
           <div className="mb-16">
             <ReviewsSlider />
+            <div className="mx-auto mt-12 max-w-3xl rounded-2xl border border-white/10 bg-white/10 p-8 text-white shadow-xl backdrop-blur-md">
+  <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <div>
+      <h3 className="text-2xl font-bold">Leave a Review</h3>
+      <p className="mt-2 text-sm text-green-50">
+        Share your experience so the team can review it before publishing.
+      </p>
+    </div>
+
+    <button
+      type="button"
+      onClick={() => setReviewOpen((prev) => !prev)}
+      className="rounded-full bg-green-700 px-7 py-3 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-green-600"
+    >
+      Write Review
+    </button>
+  </div>
+
+  {reviewOpen && (
+    <form
+      onSubmit={async (e) => {
+        e.preventDefault();
+
+        const form = e.currentTarget as HTMLFormElement;
+        const formData = new FormData(form);
+
+        if (reviewRating === 0) {
+          alert("Please select a star rating.");
+          return;
+        }
+
+        const payload = {
+          fullName: formData.get("fullName"),
+          rating: reviewRating,
+          serviceUsed: formData.get("serviceUsed"),
+          city: formData.get("city"),
+          reviewMessage: formData.get("reviewMessage"),
+        };
+
+        try {
+          const response = await fetch("/api/review", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          });
+
+          if (!response.ok) {
+            alert("Something went wrong. Please try again.");
+            return;
+          }
+
+          alert("Thank you! Your review has been submitted.");
+          form.reset();
+          setReviewRating(0);
+          setReviewOpen(false);
+        } catch (error) {
+          console.error("Review submit error:", error);
+          alert("Something went wrong. Please try again.");
+        }
+      }}
+      className="mt-6 space-y-5"
+    >
+      <div>
+        <label className="mb-2 block text-xs font-bold uppercase tracking-[0.2em] text-green-200">
+          Star Rating
+        </label>
+
+        <div className="flex gap-2">
+          {[1, 2, 3, 4, 5].map((star) => (
+            <button
+              key={star}
+              type="button"
+              onClick={() => setReviewRating(star)}
+              className={`text-4xl transition ${
+                star <= reviewRating ? "text-yellow-400" : "text-white/30"
+              }`}
+            >
+              ★
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <input
+          name="fullName"
+          type="text"
+          placeholder="Full Name"
+          required
+          className="rounded-xl border border-white/10 bg-white px-4 py-3 text-sm text-neutral-900 outline-none"
+        />
+
+        <input
+          name="city"
+          type="text"
+          placeholder="City"
+          className="rounded-xl border border-white/10 bg-white px-4 py-3 text-sm text-neutral-900 outline-none"
+        />
+
+        <select
+          name="serviceUsed"
+          defaultValue=""
+          className="rounded-xl border border-white/10 bg-white px-4 py-3 text-sm text-neutral-900 outline-none md:col-span-2"
+        >
+          <option value="" disabled>
+            Service Used
+          </option>
+          <option value="Lawn Maintenance">Lawn Maintenance</option>
+          <option value="Landscape Design">Landscape Design</option>
+          <option value="New Irrigation Installation">New Irrigation Installation</option>
+          <option value="Hardscape Installation">Hardscape Installation</option>
+          <option value="Natural Walkway">Natural Walkway</option>
+          <option value="Landscape Lighting">Landscape Lighting</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <textarea
+        name="reviewMessage"
+        placeholder="Write your review..."
+        rows={5}
+        required
+        className="w-full rounded-xl border border-white/10 bg-white px-4 py-3 text-sm text-neutral-900 outline-none"
+      />
+
+      <button
+        type="submit"
+        className="w-full rounded-full bg-green-700 px-8 py-4 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-green-600"
+      >
+        Submit Review
+      </button>
+    </form>
+  )}
+</div>
           </div>
 
           <div id="contact" className="mx-auto max-w-3xl rounded-2xl bg-white p-10 text-neutral-900 shadow-xl">
@@ -365,19 +529,17 @@ export default function LandscapeDemoHomepage() {
                       className="w-full rounded-xl border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-900 outline-none transition focus:border-green-700"
                       required
                     >
-                      <option value="">Select a service</option>
-                      <optgroup label="Softscaping">
-                        <option value="Lay grass or sod">Lay grass or sod</option>
-                        <option value="Lay artificial turf">Lay artificial turf</option>
-                        <option value="Plant trees or shrubs">Plant trees or shrubs</option>
-                        <option value="Plant flower beds">Plant flower beds</option>
-                        <option value="Apply mulch">Apply mulch</option>
-                        <option value="Install or repair sprinklers">Install or repair sprinklers</option>
-                        <option value="Install or repair outdoor lighting">Install or repair outdoor lighting</option>
+                      <option value="">Select A Service</option>
+                      <optgroup label="Maintenance & Landscaping">
+                        <option value="Lawn Maintenance">Lawn Maintenance</option>
+                        <option value="Landscape Design">Landscape Design</option>
+                        <option value="New Irrigation Installation">New Irrigation Installation</option>
+                        <option value="Landscape Lighting">Landscape Lighting</option>
                       </optgroup>
                       <optgroup label="Hardscaping">
-                        <option value="Retaining wall">Retaining wall</option>
-                        <option value="Pavers, boulders, or stones">Pavers, boulders, or stones</option>
+                        <option value="Hardscape Installation">Hardscape Installation</option>
+                        <option value="Natural Walkway">Natural Walkway</option>
+                        <option value="Pavers Or Stones">Pavers Or Stones</option>
                       </optgroup>
                       <option value="Other / Not Sure Yet">Other / Not Sure Yet</option>
                     </select>
@@ -390,9 +552,9 @@ export default function LandscapeDemoHomepage() {
                       defaultValue=""
                     >
                       <option value="" disabled>Work Needed</option>
-                      <option value="Smaller landscape changes">Smaller landscape changes</option>
-                      <option value="Larger landscape changes">Larger landscape changes</option>
-                      <option value="Complete renovation">Complete renovation</option>
+                      <option value="Smaller Landscape Changes">Smaller Landscape Changes</option>
+                      <option value="Larger Landscape Changes">Larger Landscape Changes</option>
+                      <option value="Complete Renovation">Complete Renovation</option>
                     </select>
 
                     <select
@@ -402,8 +564,8 @@ export default function LandscapeDemoHomepage() {
                     >
                       <option value="" disabled>Property Type</option>
                       <option value="Home">Home</option>
-                      <option value="Multi-unit building">Multi-unit building</option>
-                      <option value="Office / business">Office / business</option>
+                      <option value="Multi-Unit Building">Multi-Unit Building</option>
+                      <option value="Office / Business">Office / Business</option>
                       <option value="Commercial">Commercial</option>
                     </select>
 
@@ -465,10 +627,10 @@ export default function LandscapeDemoHomepage() {
       <footer className="relative z-10 bg-neutral-950 px-10 py-12 text-white">
         <div className="mx-auto flex max-w-7xl flex-col justify-between gap-6 md:flex-row md:items-center">
           <div>
-            <h2 className="text-2xl font-bold">Evergreen Demo</h2>
+            <h2 className="text-2xl font-bold">ProView Landscaping</h2>
             <p className="mt-2 text-neutral-400">Private test website recreation demo.</p>
           </div>
-          <div className="text-sm text-neutral-400">© 2026 Evergreen Demo. Placeholder content only.</div>
+          <div className="text-sm text-neutral-400">© 2026 ProView Landscaping. Placeholder content only.</div>
         </div>
       </footer>
     </main>
