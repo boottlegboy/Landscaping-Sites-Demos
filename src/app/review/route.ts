@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     }
 
     await resend.emails.send({
-      from: "Review Submission <onboarding@resend.dev>",
+      from: "ProView Landscaping <noreply@proviewlandscape.com>",
       to: [
         process.env.CLIENT_EMAIL as string,
         process.env.YOUR_EMAIL as string,
