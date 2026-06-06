@@ -34,7 +34,8 @@ export async function POST(request: Request) {
     await resend.emails.send({
       from: "Estimate Request <onboarding@resend.dev>",
       to: [
-        process.env.TEST_EMAIL as string,
+        process.env.CLIENT_EMAIL as string,
+        process.env.YOUR_EMAIL as string,
       ],
       subject: `New Estimate Request from ${fullName}`,
       html: `

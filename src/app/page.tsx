@@ -117,13 +117,13 @@ export default function LandscapeDemoHomepage() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/55 to-black/85" />
       </motion.div>
-      <header className="absolute left-0 top-0 z-30 w-full px-10 py-8 text-white">
+      <header className="absolute left-0 top-0 z-30 w-full px-6 py-5 text-white md:px-10 md:py-8">
         <nav className="mx-auto flex max-w-7xl items-center justify-between">
           <a href="#home" className="flex items-center">
           <img
             src="/images/ProView Logo4.png"
             alt="ProView Landscaping Logo"
-            className="h-24 w-auto object-contain drop-shadow-[0_0_18px_rgba(134,239,172,0.25)]"
+            className="h-14 w-auto object-contain drop-shadow-[0_0_18px_rgba(134,239,172,0.25)] sm:h-16 md:h-20 lg:h-24"
             />
           </a>
           <div className="hidden items-center gap-8 text-sm font-medium uppercase tracking-wide md:flex">
@@ -138,7 +138,7 @@ export default function LandscapeDemoHomepage() {
 
       <section
   id="home"
-  className="relative z-10 flex min-h-screen w-full items-center justify-center overflow-hidden px-8 py-28 text-white"
+  className="relative z-10 flex min-h-screen w-full items-center justify-center overflow-hidden px-6 pb-24 pt-36 text-white md:px-8 md:py-28"
 >
   <div className="absolute inset-0 bg-gradient-to-b from-neutral-950/55 via-neutral-950/45 to-neutral-950/90" />
   <div className="absolute inset-0 bg-gradient-to-r from-neutral-950/75 via-neutral-950/25 to-neutral-950/70" />
@@ -155,7 +155,7 @@ export default function LandscapeDemoHomepage() {
 
       <h1
         style={{ fontFamily: baskervville.style.fontFamily }}
-        className="mb-6 max-w-4xl text-6xl font-normal leading-[0.98] text-white md:text-7xl"
+        className="mb-6 max-w-4xl text-5xl font-normal leading-[0.98] text-white sm:text-6xl md:text-7xl"
       >
         Caring For Your Outdoor Space
       </h1>
@@ -310,6 +310,10 @@ export default function LandscapeDemoHomepage() {
               <div className="rounded-2xl border border-white/10 bg-white/10 p-5">Kendall</div>
               <div className="rounded-2xl border border-white/10 bg-white/10 p-5">Cutler Bay</div>
               <div className="rounded-2xl border border-white/10 bg-white/10 p-5">Palmetto Bay</div>
+              <div className="rounded-2xl border border-white/10 bg-white/10 p-5">Coral Gables</div>
+              <div className="rounded-2xl border border-white/10 bg-white/10 p-5">Miami Beach</div>
+              <div className="rounded-2xl border border-white/10 bg-white/10 p-5">Pinecrest</div>
+              <div className="rounded-2xl border border-white/10 bg-white/10 p-5">South Miami</div>
               <div className="rounded-2xl border border-white/10 bg-white/10 p-5">Surrounding Areas</div>
             </div>
           </div>
@@ -625,13 +629,60 @@ export default function LandscapeDemoHomepage() {
       </section>
 
       <footer className="relative z-10 bg-neutral-950 px-10 py-12 text-white">
-        <div className="mx-auto flex max-w-7xl flex-col justify-between gap-6 md:flex-row md:items-center">
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 md:grid-cols-3 md:items-start">
           <div>
-            <h2 className="text-2xl font-bold">ProView Landscaping</h2>
-            <p className="mt-2 text-neutral-400">Private test website recreation demo.</p>
-          </div>
-          <div className="text-sm text-neutral-400">© 2026 ProView Landscaping. Placeholder content only.</div>
-        </div>
+      <img
+        src="/images/ProView Logo4.png"
+        alt="ProView Landscaping Logo"
+        className="mb-4 h-20 w-auto object-contain drop-shadow-[0_0_18px_rgba(134,239,172,0.25)]"
+      />
+      <p className="max-w-sm text-sm leading-7 text-neutral-400">
+        Professional landscaping, lawn maintenance, irrigation, hardscape, and
+        landscape lighting services for residential and commercial properties.
+      </p>
+    </div>
+
+    <div>
+      <h3 className="mb-4 text-lg font-bold text-white">Contact Info</h3>
+
+      <div className="space-y-3 text-sm text-neutral-300">
+        <p>
+          <span className="font-bold text-green-300">Email:</span>{" "}
+          <a
+            href="mailto:Proviewlandsacaping@gmail.com"
+            className="hover:text-green-300"
+          >
+            Proviewlandscaping@gmail.com
+          </a>
+        </p>
+
+        <p>
+          <span className="font-bold text-green-300">Phone:</span>{" "}
+          <a href="tel:3054846098" className="hover:text-green-300">
+            (305) 484-6098
+          </a>
+        </p>
+
+        <p>
+          <span className="font-bold text-green-300">Address:</span>{" "}
+          28032 SW 164 PL, Homestead, FL 33033
+        </p>
+      </div>
+    </div>
+
+    <div>
+      <h3 className="mb-4 text-lg font-bold text-white">Service Area</h3>
+
+      <p className="text-sm leading-7 text-neutral-400">
+        Serving Homestead, Miami, Kendall, Cutler Bay, Palmetto Bay, Coral
+        Gables, Miami Beach, Pinecrest, South Miami, and surrounding areas.
+      </p>
+    </div>
+  </div>
+
+  <div className="mx-auto mt-10 max-w-7xl border-t border-white/10 pt-6 text-sm text-neutral-500">
+    © 2026 ProView Landscaping. All rights reserved.
+    </div>
       </footer>
     </main>
   );

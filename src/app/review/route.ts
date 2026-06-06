@@ -30,7 +30,10 @@ export async function POST(request: Request) {
 
     await resend.emails.send({
       from: "Review Submission <onboarding@resend.dev>",
-      to: process.env.TEST_EMAIL as string,
+      to: [
+        process.env.CLIENT_EMAIL as string,
+        process.env.YOUR_EMAIL as string,
+      ],
       subject: `New ${rating}/5 Review from ${fullName}`,
       html: `
         <h2>New Review Submission</h2>
