@@ -401,7 +401,7 @@ export default function LandscapeDemoHomepage() {
         };
 
         try {
-          const response = await fetch("/api/review", {
+          const response = await fetch("/review", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
