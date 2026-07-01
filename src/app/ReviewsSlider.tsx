@@ -8,25 +8,25 @@ import "swiper/css/pagination";
 const reviews = [
   {
     quote:
-      "The team was professional, fast, and the final result made the property look completely refreshed.",
-    name: "Maria R.",
-    role: "Residential Client",
+      "ProView did a great job cleaning up our beds, trimming everything back, and leaving the yard looking better than it has in years.",
+    name: "Maria G.",
+    role: "Homeowner",
   },
   {
     quote:
-      "Great communication from start to finish. They explained the estimate clearly and delivered clean work.",
-    name: "Daniel P.",
+      "They showed up when they said they would, explained the estimate clearly, and finished the work with a clean attention to detail.",
+    name: "Daniel R.",
     role: "Property Owner",
   },
   {
     quote:
-      "Reliable landscaping service with attention to detail. I would definitely recommend them.",
+      "Our irrigation and lawn maintenance have been much easier since working with ProView. The property looks consistent week after week.",
     name: "Sofia M.",
-    role: "Local Customer",
+    role: "Residential Client",
   },
   {
     quote:
-      "Very easy to work with and the project came out exactly how we wanted.",
+      "The hardscape work came out exactly how we pictured it. The crew was respectful, organized, and easy to work with.",
     name: "Carlos T.",
     role: "Homeowner",
   },
@@ -47,10 +47,10 @@ export default function ReviewsSlider() {
         <SwiperSlide key={index}>
           <div className="rounded-2xl border border-white/10 bg-white/10 p-8 text-white backdrop-blur-md">
             <p className="mb-6 text-lg leading-8 text-green-50">
-              “{review.quote}”
+              &quot;{review.quote}&quot;
             </p>
-            <p className="font-bold">{review.name}</p>
-            <p className="text-sm text-green-200">{review.role}</p>
+            <p className="text-base font-bold leading-6 tracking-normal text-white">{review.name}</p>
+            <p className="text-sm font-normal leading-5 tracking-normal text-green-200">{review.role}</p>
           </div>
         </SwiperSlide>
       ))}

@@ -355,7 +355,7 @@ export default function LandscapeDemoHomepage() {
               Trusted by homeowners who care about quality.
             </h2>
             <p className="text-lg leading-8 text-green-50">
-              Placeholder reviews can be replaced with verified Google reviews, customer testimonials, or before-and-after project feedback.
+              Homeowners and local property managers count on ProView Landscaping for dependable communication, clean workmanship, and outdoor spaces that stay looking sharp.
             </p>
           </div>
 
@@ -366,7 +366,7 @@ export default function LandscapeDemoHomepage() {
     <div>
       <h3 className="text-2xl font-bold">Leave a Review</h3>
       <p className="mt-2 text-sm text-green-50">
-        Share your experience so the team can review it before publishing.
+        Tell us how your project went and help future customers choose ProView with confidence.
       </p>
     </div>
 
