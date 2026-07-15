@@ -14,6 +14,12 @@ export default function LandscapeDemoHomepage() {
   const [selectedService, setSelectedService] = useState("");
   const [reviewOpen, setReviewOpen] = useState(false);
   const [reviewRating, setReviewRating] = useState(0);
+  const [hedgeLength, setHedgeLength] = useState(24);
+  const [activeHedgeIndex, setActiveHedgeIndex] = useState(0);
+  const [selectedHedgeSizeIndex, setSelectedHedgeSizeIndex] = useState(0);
+  const [hedgePackageType, setHedgePackageType] = useState("Plants + Install");
+  const [hedgeQuoteSubmitting, setHedgeQuoteSubmitting] = useState(false);
+  const [hedgeQuoteMessage, setHedgeQuoteMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -75,6 +81,138 @@ export default function LandscapeDemoHomepage() {
   const aboutRevealY = useTransform(scrollYProgress, [0.1, 0.35], [80, 0]);
   const aboutRevealOpacity = useTransform(scrollYProgress, [0.1, 0.35], [0, 1]);
   const portfolioY = useTransform(scrollYProgress, [0.45, 0.85], [90, -40]);
+  const hedgeVarieties = [
+    {
+      name: "Podocarpus",
+      image: "/hedges/podocarpus.jpg",
+      tag: "Clean vertical privacy",
+      description:
+        "A polished evergreen option for tall, structured privacy along entries, fences, and property lines.",
+      sizes: [
+        { label: "3 gal - 2-3 ft tall x 1-1.5 ft wide", spacing: 1.5 },
+        { label: "7 gal - 3-4 ft tall x 1.5-2 ft wide", spacing: 2 },
+        { label: "15 gal - 4-5 ft tall x 2-2.5 ft wide", spacing: 2.5 },
+      ],
+    },
+    {
+      name: "Clusia",
+      image: "/hedges/clusia.jpg",
+      tag: "Dense tropical coverage",
+      description:
+        "A hardy South Florida favorite with broad green leaves that fill in well for privacy screens.",
+      sizes: [
+        { label: "3 gal - 2-3 ft tall x 1.5-2 ft wide", spacing: 2 },
+        { label: "7 gal - 3-4 ft tall x 2-2.5 ft wide", spacing: 2.5 },
+        { label: "15 gal - 4-5 ft tall x 2.5-3 ft wide", spacing: 3 },
+      ],
+    },
+    {
+      name: "Areca",
+      image: "/projects/IMG_0323.jpeg",
+      tag: "Soft palm screening",
+      description:
+        "A tropical palm option for customers who want privacy with a softer, resort-style look.",
+      sizes: [
+        { label: "7 gal - 3-4 ft tall x 2-3 ft wide", spacing: 3 },
+        { label: "15 gal - 5-6 ft tall x 3-4 ft wide", spacing: 4 },
+        { label: "25 gal - 7-8 ft tall x 4-5 ft wide", spacing: 5 },
+      ],
+    },
+    {
+      name: "Green Buttonwood Bush",
+      image: "/projects/IMG_0233.jpeg",
+      tag: "Low, full screening",
+      description:
+        "A durable native-style hedge choice that can be kept lower and shaped into a full green border.",
+      sizes: [
+        { label: "3 gal - 2-3 ft tall x 1.5-2 ft wide", spacing: 2 },
+        { label: "7 gal - 3-4 ft tall x 2-2.5 ft wide", spacing: 2.5 },
+        { label: "15 gal - 4-5 ft tall x 2.5-3 ft wide", spacing: 3 },
+      ],
+    },
+    {
+      name: "Green Buttonwood Tree",
+      image: "/projects/IMG_3864.jpeg",
+      tag: "Taller privacy presence",
+      description:
+        "A stronger vertical option for larger spaces that need privacy, shade, and a more established look.",
+      sizes: [
+        { label: "15 gal - 5-6 ft tall x 2.5-3 ft wide", spacing: 4 },
+        { label: "25 gal - 7-8 ft tall x 3-4 ft wide", spacing: 5 },
+        { label: "45 gal - 9-10 ft tall x 4-5 ft wide", spacing: 6 },
+      ],
+    },
+  ];
+  const activeHedge = hedgeVarieties[activeHedgeIndex];
+  const selectedHedgeSize = activeHedge.sizes[Math.min(selectedHedgeSizeIndex, activeHedge.sizes.length - 1)];
+  const hedgePlantCount = Math.max(1, Math.ceil(hedgeLength / selectedHedgeSize.spacing));
+
+  async function handleHedgeQuoteSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setHedgeQuoteSubmitting(true);
+    setHedgeQuoteMessage("");
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const notes = formData.get("notes")?.toString() || "";
+    const payload = {
+      serviceNeeded: "Privacy Hedge Quote",
+      workNeeded: hedgePackageType,
+      propertyType: formData.get("propertyType")?.toString() || "",
+      fullName: formData.get("fullName")?.toString() || "",
+      phone: formData.get("phone")?.toString() || "",
+      email: formData.get("email")?.toString() || "",
+      city: formData.get("city")?.toString() || "",
+      projectDescription: [
+        `Hedge option: ${activeHedge.name}`,
+        `Selected size: ${selectedHedgeSize.label}`,
+        `Hedge length: ${hedgeLength} ft`,
+        `Recommended spacing: ${selectedHedgeSize.spacing} ft apart`,
+        `Estimated plants needed: ${hedgePlantCount}`,
+        `Package type: ${hedgePackageType}`,
+        notes ? `Customer notes: ${notes}` : "",
+      ]
+        .filter(Boolean)
+        .join("\n"),
+    };
+
+    try {
+      const response = await fetch("/estimate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(data?.error || "Unable to send hedge quote request.");
+      }
+
+      setHedgeQuoteMessage("Hedge quote request sent successfully.");
+      form.reset();
+      setHedgePackageType("Plants + Install");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unable to send hedge quote request.";
+      setHedgeQuoteMessage(message);
+    } finally {
+      setHedgeQuoteSubmitting(false);
+    }
+  }
+  const hedgeOptions = [
+    {
+      title: "Plants Only",
+      description:
+        "For homeowners who want a quick privacy upgrade and prefer to handle the planting themselves.",
+      detail: "Choose the hedge type and order plants by quantity.",
+    },
+    {
+      title: "Plants + Install",
+      description:
+        "ProView brings the hedge plants, lays out the spacing, plants them, and leaves the area clean.",
+      detail: "Best for fast privacy without managing the labor.",
+    },
+  ];
   const services = [
     {
       title: "Landscape Design",
@@ -100,6 +238,11 @@ export default function LandscapeDemoHomepage() {
       title: "Landscape Lighting",
       description:
         "Highlight the beauty of your property with custom landscape lighting. We install elegant, energy-efficient lighting solutions that enhance curb appeal, improve safety, and create a welcoming outdoor atmosphere after dark.",
+    },
+    {
+      title: "Privacy Hedge Packages",
+      description:
+        "A faster path to privacy using hedge plants like podocarpus, clusia, areca, and green buttonwood. Customers can order plants only for DIY installation or have ProView handle delivery, layout, planting, and cleanup.",
     },
   ];
 
@@ -130,6 +273,7 @@ export default function LandscapeDemoHomepage() {
             <a href="#home">Home</a>
             <a href="#about">About</a>
             <a href="#services">Services</a>
+            <a href="#privacy-hedges">Hedges</a>
             <a href="#portfolio">Portfolio</a>
             <a href="#contact" className="rounded-full border border-white px-5 py-2">Get Started</a>
           </div>
@@ -290,6 +434,284 @@ export default function LandscapeDemoHomepage() {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="privacy-hedges" className="relative z-10 my-24 overflow-hidden bg-green-950 px-6 py-28 text-white shadow-2xl md:px-10">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_15%,rgba(74,222,128,0.18),transparent_32%)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-green-900/35 via-transparent to-neutral-950/35" />
+
+        <div className="relative z-10 mx-auto max-w-7xl">
+          <div className="mb-14 grid grid-cols-1 gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-end">
+            <div>
+              <p className="mb-4 text-sm font-bold uppercase tracking-[0.3em] text-green-300">Privacy Hedge Packages</p>
+              <h2 style={{ fontFamily: baskervville.style.fontFamily }} className="mb-6 text-5xl font-normal leading-tight text-white md:text-6xl">
+                Fast privacy without a full landscape redesign.
+              </h2>
+              <p className="max-w-2xl text-lg leading-8 text-green-50">
+                Choose from podocarpus, clusia, areca, green buttonwood bush, or green buttonwood tree options to add privacy, soften a property line, or cover an open view without waiting on a full design process. Buy the plants and install them yourself, or have ProView install them for you.
+              </p>
+            </div>
+
+            <div className="rounded-[2rem] border border-white/10 bg-white/10 p-4 shadow-2xl backdrop-blur-md">
+              <div className="relative overflow-hidden rounded-[1.5rem] bg-green-900/60 shadow-xl">
+                <img
+                  src={activeHedge.image}
+                  alt={`${activeHedge.name} hedge option`}
+                  className="h-[380px] w-full object-cover transition duration-500"
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent p-6">
+                  <p className="text-xs font-bold uppercase tracking-[0.25em] text-green-200">{activeHedge.tag}</p>
+                  <h3 className="mt-2 text-4xl font-extrabold text-white">{activeHedge.name}</h3>
+                  <p className="mt-2 max-w-xl text-sm leading-6 text-green-50">{activeHedge.description}</p>
+                </div>
+              </div>
+
+              <div className="mt-4 grid grid-cols-5 gap-2">
+                {hedgeVarieties.map((hedge, index) => (
+                  <button
+                    key={hedge.name}
+                    type="button"
+                    onClick={() => {
+                      setActiveHedgeIndex(index);
+                      setSelectedHedgeSizeIndex(0);
+                    }}
+                    aria-label={`View ${hedge.name}`}
+                    className={`h-16 overflow-hidden rounded-xl border transition ${
+                      index === activeHedgeIndex ? "border-green-300 opacity-100" : "border-white/10 opacity-60 hover:opacity-90"
+                    }`}
+                  >
+                    <img src={hedge.image} alt="" className="h-full w-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-8 grid grid-cols-1 gap-3 text-sm md:grid-cols-5">
+            {hedgeVarieties.map((hedge, index) => (
+              <button
+                key={hedge.name}
+                type="button"
+                onClick={() => {
+                  setActiveHedgeIndex(index);
+                  setSelectedHedgeSizeIndex(0);
+                }}
+                className={`rounded-2xl border p-4 text-left transition ${
+                  index === activeHedgeIndex
+                    ? "border-green-300 bg-green-400 text-green-950"
+                    : "border-white/10 bg-black/20 text-green-50 hover:bg-white/10"
+                }`}
+              >
+                <span className="block font-extrabold">{hedge.name}</span>
+                <span className={`mt-1 block text-xs font-semibold ${index === activeHedgeIndex ? "text-green-950/75" : "text-green-200"}`}>
+                  {hedge.tag}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+            <div className="rounded-[2rem] border border-white/10 bg-white/10 p-7 shadow-xl backdrop-blur-md">
+              <p className="mb-3 text-sm font-bold uppercase tracking-[0.25em] text-green-200">Quick Estimator</p>
+              <h3 className="mb-5 text-3xl font-bold text-white">How many plants do I need?</h3>
+
+              <label className="mb-2 block text-sm font-bold text-green-100" htmlFor="hedge-length">
+                Hedge length in feet
+              </label>
+              <input
+                id="hedge-length"
+                type="number"
+                min="1"
+                max="300"
+                value={hedgeLength}
+                onChange={(event) => setHedgeLength(Number(event.target.value) || 1)}
+                className="mb-5 w-full rounded-xl border border-white/10 bg-white px-4 py-3 text-sm font-bold text-neutral-900 outline-none transition focus:border-green-400"
+              />
+
+              <label className="mb-2 block text-sm font-bold text-green-100" htmlFor="hedge-type">
+                Hedge option
+              </label>
+              <select
+                id="hedge-type"
+                value={activeHedgeIndex}
+                onChange={(event) => {
+                  setActiveHedgeIndex(Number(event.target.value));
+                  setSelectedHedgeSizeIndex(0);
+                }}
+                className="mb-5 w-full rounded-xl border border-white/10 bg-white px-4 py-3 text-sm font-bold text-neutral-900 outline-none transition focus:border-green-400"
+              >
+                {hedgeVarieties.map((hedge, index) => (
+                  <option key={hedge.name} value={index}>
+                    {hedge.name}
+                  </option>
+                ))}
+              </select>
+
+              <label className="mb-2 block text-sm font-bold text-green-100" htmlFor="hedge-size">
+                Available size
+              </label>
+              <select
+                id="hedge-size"
+                value={selectedHedgeSizeIndex}
+                onChange={(event) => setSelectedHedgeSizeIndex(Number(event.target.value))}
+                className="mb-6 w-full rounded-xl border border-white/10 bg-white px-4 py-3 text-sm font-bold text-neutral-900 outline-none transition focus:border-green-400"
+              >
+                {activeHedge.sizes.map((size, index) => (
+                  <option key={size.label} value={index}>
+                    {size.label}
+                  </option>
+                ))}
+              </select>
+
+              <div className="rounded-2xl bg-green-400 p-6 text-green-950">
+                <p className="text-sm font-bold uppercase tracking-[0.2em]">Estimated Plants</p>
+                <p className="mt-2 text-6xl font-extrabold leading-none">{hedgePlantCount}</p>
+                <p className="mt-2 text-sm font-bold">
+                  Based on {activeHedge.name} at about {selectedHedgeSize.spacing} ft apart.
+                </p>
+                <p className="mt-3 text-sm font-semibold">
+                  Final quantity depends on plant size, spacing, corners, gates, and site conditions.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              {hedgeOptions.map((option) => (
+                <div key={option.title} className="flex min-h-[360px] flex-col rounded-[2rem] border border-white/10 bg-white/10 p-7 shadow-xl backdrop-blur-md">
+                  <div className="mb-6 h-48 overflow-hidden rounded-[1.5rem] bg-green-900/60">
+                    <img
+                      src={option.title === "Plants Only" ? "/projects/IMG_0233.jpeg" : "/projects/IMG_0323.jpeg"}
+                      alt={option.title === "Plants Only" ? "Rows of potted plants ready for a landscape project" : "Installed tropical landscaping with privacy plants"}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <h3 className="mb-3 text-3xl font-extrabold text-white">{option.title}</h3>
+                  <p className="mb-5 leading-7 text-green-50">{option.description}</p>
+                  <p className="mb-7 rounded-2xl bg-black/20 p-4 text-sm font-bold text-green-200">{option.detail}</p>
+                  <a
+                    href="#hedge-quote-form"
+                    onClick={() => {
+                      setHedgePackageType(option.title);
+                    }}
+                    className="mt-auto inline-flex justify-center rounded-full bg-green-600 px-7 py-4 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-green-500"
+                  >
+                    Request Hedge Quote
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div id="hedge-quote-form" className="mt-8 rounded-[2rem] border border-white/10 bg-white p-7 text-neutral-950 shadow-2xl md:p-9">
+            <div className="mb-7 grid grid-cols-1 gap-6 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+              <div>
+                <p className="mb-3 text-sm font-bold uppercase tracking-[0.25em] text-green-700">Hedge Quote Request</p>
+                <h3 className="mb-4 text-3xl font-extrabold text-neutral-950">Request this hedge package.</h3>
+                <p className="leading-7 text-neutral-600">
+                  This form sends ProView the hedge option, size, length, recommended spacing, and estimated plant count from the calculator above.
+                </p>
+              </div>
+
+              <div className="rounded-2xl bg-green-950 p-5 text-white">
+                <p className="text-xs font-bold uppercase tracking-[0.2em] text-green-300">Selected Hedge Details</p>
+                <div className="mt-4 grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
+                  <p><span className="font-bold text-green-200">Option:</span> {activeHedge.name}</p>
+                  <p><span className="font-bold text-green-200">Size:</span> {selectedHedgeSize.label}</p>
+                  <p><span className="font-bold text-green-200">Length:</span> {hedgeLength} ft</p>
+                  <p><span className="font-bold text-green-200">Plants:</span> {hedgePlantCount}</p>
+                </div>
+              </div>
+            </div>
+
+            <form onSubmit={handleHedgeQuoteSubmit} className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div>
+                <label className="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-neutral-500" htmlFor="hedge-package-type">
+                  Package Type
+                </label>
+                <select
+                  id="hedge-package-type"
+                  value={hedgePackageType}
+                  onChange={(event) => setHedgePackageType(event.target.value)}
+                  className="w-full rounded-xl border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-900 outline-none transition focus:border-green-700"
+                >
+                  <option value="Plants Only">Plants Only</option>
+                  <option value="Plants + Install">Plants + Install</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-neutral-500" htmlFor="hedge-property-type">
+                  Property Type
+                </label>
+                <select
+                  id="hedge-property-type"
+                  name="propertyType"
+                  defaultValue=""
+                  className="w-full rounded-xl border border-neutral-300 bg-white px-4 py-3 text-sm text-neutral-900 outline-none transition focus:border-green-700"
+                >
+                  <option value="" disabled>Property Type</option>
+                  <option value="Home">Home</option>
+                  <option value="Multi-Unit Building">Multi-Unit Building</option>
+                  <option value="Office / Business">Office / Business</option>
+                  <option value="Commercial">Commercial</option>
+                </select>
+              </div>
+
+              <input
+                name="fullName"
+                type="text"
+                placeholder="Full Name"
+                required
+                className="rounded-xl border border-neutral-300 px-4 py-3 text-sm outline-none transition focus:border-green-700"
+              />
+              <input
+                name="phone"
+                type="tel"
+                placeholder="Phone Number"
+                required
+                className="rounded-xl border border-neutral-300 px-4 py-3 text-sm outline-none transition focus:border-green-700"
+              />
+              <input
+                name="email"
+                type="email"
+                placeholder="Email Address"
+                className="rounded-xl border border-neutral-300 px-4 py-3 text-sm outline-none transition focus:border-green-700"
+              />
+              <input
+                name="city"
+                type="text"
+                placeholder="City / Work Area"
+                className="rounded-xl border border-neutral-300 px-4 py-3 text-sm outline-none transition focus:border-green-700"
+              />
+              <textarea
+                name="notes"
+                placeholder="Anything else we should know about the hedge area?"
+                rows={4}
+                className="rounded-xl border border-neutral-300 px-4 py-3 text-sm outline-none transition focus:border-green-700 md:col-span-2"
+              />
+
+              {hedgeQuoteMessage ? (
+                <p className={`text-sm md:col-span-2 ${hedgeQuoteMessage.includes("successfully") ? "text-green-700" : "text-red-700"}`}>
+                  {hedgeQuoteMessage}
+                </p>
+              ) : null}
+
+              <button
+                type="submit"
+                disabled={hedgeQuoteSubmitting}
+                className="rounded-full bg-green-800 px-8 py-4 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-green-900/70 md:col-span-2"
+              >
+                {hedgeQuoteSubmitting ? "Sending..." : "Submit Hedge Quote Request"}
+              </button>
+            </form>
+          </div>
+
+          <div className="mt-8 grid grid-cols-1 gap-4 text-sm font-semibold text-green-50 md:grid-cols-3">
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">Good for fast privacy along fences, patios, pools, and side yards.</div>
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">Multiple hedge choices let customers match the privacy, height, and look they want.</div>
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-5">Available as plant-only orders or installed hedge packages.</div>
           </div>
         </div>
       </section>
@@ -539,6 +961,8 @@ export default function LandscapeDemoHomepage() {
                         <option value="Landscape Design">Landscape Design</option>
                         <option value="New Irrigation Installation">New Irrigation Installation</option>
                         <option value="Landscape Lighting">Landscape Lighting</option>
+                        <option value="Privacy Hedge Plants Only">Privacy Hedge Plants Only</option>
+                        <option value="Privacy Hedge Plants + Install">Privacy Hedge Plants + Install</option>
                       </optgroup>
                       <optgroup label="Hardscaping">
                         <option value="Hardscape Installation">Hardscape Installation</option>

@@ -11,6 +11,21 @@ function escapeHtml(value: unknown) {
     .replaceAll("'", "&#039;");
 }
 
+function formatProjectDescription(value: unknown) {
+  const lines = String(value ?? "")
+    .split(/\r?\n/)
+    .map((line) => escapeHtml(line.trim()))
+    .filter(Boolean);
+
+  if (lines.length === 0) {
+    return "<p>No description provided.</p>";
+  }
+
+  return lines
+    .map((line) => `<p style="margin: 0 0 8px;"><span>${line}</span></p>`)
+    .join("");
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -22,7 +37,7 @@ export async function POST(request: Request) {
     const serviceNeeded = escapeHtml(body.serviceNeeded);
     const workNeeded = escapeHtml(body.workNeeded);
     const propertyType = escapeHtml(body.propertyType);
-    const projectDescription = escapeHtml(body.projectDescription);
+    const projectDescription = formatProjectDescription(body.projectDescription);
 
     if (!fullName || !phone || !serviceNeeded) {
       return Response.json(
@@ -55,7 +70,7 @@ export async function POST(request: Request) {
         <hr />
 
         <p><strong>Project Description:</strong></p>
-        <p>${projectDescription || "No description provided."}</p>
+        <div>${projectDescription}</div>
       `,
     });
 
