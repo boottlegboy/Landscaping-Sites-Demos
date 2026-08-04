@@ -138,7 +138,7 @@ export default function LandscapeDemoHomepage() {
   const [selectedService, setSelectedService] = useState("");
   const [reviewOpen, setReviewOpen] = useState(false);
   const [reviewRating, setReviewRating] = useState(0);
-  const [hedgeLength, setHedgeLength] = useState(24);
+  const [hedgeLengthInput, setHedgeLengthInput] = useState("24");
   const [activeHedgeIndex, setActiveHedgeIndex] = useState(0);
   const [selectedHedgeSizeIndex, setSelectedHedgeSizeIndex] = useState(0);
   const [hedgePackageType, setHedgePackageType] = useState("Plants + Install");
@@ -150,6 +150,8 @@ export default function LandscapeDemoHomepage() {
 
   const activeHedge = hedgeVarieties[activeHedgeIndex];
   const selectedHedgeSize = activeHedge.sizes[Math.min(selectedHedgeSizeIndex, activeHedge.sizes.length - 1)];
+  const parsedHedgeLength = Number(hedgeLengthInput);
+  const hedgeLength = Number.isFinite(parsedHedgeLength) && parsedHedgeLength > 0 ? parsedHedgeLength : 1;
   const hedgePlantCount = Math.max(1, Math.ceil(hedgeLength / selectedHedgeSize.spacing));
 
   async function handleEstimateSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -418,8 +420,21 @@ export default function LandscapeDemoHomepage() {
                 type="number"
                 min="1"
                 max="300"
-                value={hedgeLength}
-                onChange={(event) => setHedgeLength(Number(event.target.value) || 1)}
+                value={hedgeLengthInput}
+                onChange={(event) => setHedgeLengthInput(event.target.value)}
+                onBlur={() => {
+                  if (hedgeLengthInput.trim() === "") {
+                    setHedgeLengthInput("1");
+                    return;
+                  }
+
+                  const nextLength = Number(hedgeLengthInput);
+                  if (!Number.isFinite(nextLength) || nextLength < 1) {
+                    setHedgeLengthInput("1");
+                  } else if (nextLength > 300) {
+                    setHedgeLengthInput("300");
+                  }
+                }}
                 className="mb-5 w-full rounded-lg border border-neutral-300 bg-white px-4 py-3 text-sm font-bold outline-none transition focus:border-green-700"
               />
 
