@@ -758,7 +758,6 @@ export default function LandscapeDemoHomepage() {
             <div className="space-y-3 text-sm text-white/65">
               <p><span className="font-bold text-green-300">Email:</span> <a href="mailto:Proviewlandsacaping@gmail.com" className="hover:text-green-300">Proviewlandscaping@gmail.com</a></p>
               <p><span className="font-bold text-green-300">Phone:</span> <a href="tel:3054846098" className="hover:text-green-300">(305) 484-6098</a></p>
-              <p><span className="font-bold text-green-300">Address:</span> 28032 SW 164 PL, Homestead, FL 33033</p>
             </div>
           </div>
           <div>
