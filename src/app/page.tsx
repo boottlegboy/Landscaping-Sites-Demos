@@ -82,7 +82,7 @@ const hedgeVarieties = [
   },
   {
     name: "Areca",
-    image: "/projects/IMG_0323.jpeg",
+    image: "/hedges/areca-palm.png",
     tag: "Soft palm screening",
     description:
       "A tropical palm option for customers who want privacy with a softer, resort-style look.",
@@ -94,7 +94,7 @@ const hedgeVarieties = [
   },
   {
     name: "Green Buttonwood Bush",
-    image: "/projects/IMG_0233.jpeg",
+    image: "/hedges/green-buttonwood-hedge.png",
     tag: "Low, full screening",
     description:
       "A durable hedge choice that can be kept lower and shaped into a full green border.",
@@ -106,7 +106,7 @@ const hedgeVarieties = [
   },
   {
     name: "Green Buttonwood Tree",
-    image: "/projects/IMG_3864.jpeg",
+    image: "/hedges/green-buttonwood-tree.png",
     tag: "Taller privacy presence",
     description:
       "A stronger vertical option for larger spaces that need privacy, shade, and a more established look.",
